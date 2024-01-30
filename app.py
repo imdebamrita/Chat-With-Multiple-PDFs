@@ -39,7 +39,9 @@ def get_text_chunks(text):
 
 def get_vector_store(text_chunks):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
+    text_chunks_encoded = [chunk.encode(
+        'utf-8', 'replace').decode('utf-8') for chunk in text_chunks]
+    vector_store = FAISS.from_texts(text_chunks_encoded, embedding=embeddings)
     vector_store.save_local("faiss_index")
 
 
