@@ -9,6 +9,7 @@ from langchain.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
+# from langchain.exceptions import BlockedPromptException
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,9 +21,9 @@ def get_pdf_text(pdf_docs):
     text = ""
     try:
         for pdf in pdf_docs:
-            pdf_reader= PdfReader(pdf)
+            pdf_reader = PdfReader(pdf)
             for page in pdf_reader.pages:
-                text+= page.extract_text()
+                text += page.extract_text()
     except Exception as e:
         st.error(f"Error reading PDF: {e}")
         text = None
@@ -60,6 +61,15 @@ def get_conversational_chain():
 
 
 def user_input(user_question):
+    # model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
+
+    # safety_rating = model.rate_safety(user_question)
+    # for rating in safety_rating:
+    #     if rating.probability == "HIGH":
+    #         st.warning(
+    #             "Warning: This question may contain explicit or harmful content.")
+    #         return
+
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
     new_db = FAISS.load_local("faiss_index", embeddings)
@@ -67,17 +77,28 @@ def user_input(user_question):
 
     chain = get_conversational_chain()
 
-    response = chain(
-        {"input_documents": docs, "question": user_question},
-        return_only_outputs=True)
+    try:
+        response = chain(
+            {"input_documents": docs, "question": user_question},
+            return_only_outputs=True)
 
-    print(response)
-    st.write("Reply: ", response["output_text"])
+        print("response:", response)
+        st.text_area("Answer: ", response["output_text"], int(len(
+            response["output_text"])/2))
+    except Exception as e:
+        st.warning(
+            f"Warning: This question may contain explicit or harmful content: \n{e}")
 
 
 def main():
-    st.set_page_config("Chat With Multiple PDF")
-    st.header("Chat with Multiple PDF using Gemini Pro")
+    st.set_page_config(page_title="Chat With Multiple PDF",
+                       initial_sidebar_state='expanded',
+                       menu_items={
+                           'Get Help': 'https://www.linkedin.com/in/imdebamritapaul/',
+                           'Report a bug': "mailto:imdebamrita@1gmail.com",
+                           'About': "< ___Made by : Debamrita Paul___ > Connect in LinkedIn: https://www.linkedin.com/in/imdebamritapaul/ 📲🚀"
+                       })
+    st.header("📚 Chat with Multiple PDFs using Gemini Pro 🚀")
 
     user_question = st.text_input("Ask a Question from the PDF Files")
 
@@ -86,7 +107,8 @@ def main():
 
     with st.sidebar:
         st.title("Menu")
-        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True, type=['pdf'])
+        pdf_docs = st.file_uploader(
+            "Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True, type=['pdf'])
         if st.button("Submit & Process"):
             with st.spinner("Processing..."):
                 # if pdf_docs is not None:
@@ -99,6 +121,9 @@ def main():
                 st.success("Done and Go Ahead to ask any Question")
                 # else:
                 #     st.warning("No files uploaded. Please upload PDF files.")
+        st.sidebar.text("Made by Debamrita Paul")
+        st.sidebar.write(
+            "[Connect ⤴](https://www.linkedin.com/in/imdebamritapaul/)")
 
 
 if __name__ == "__main__":
