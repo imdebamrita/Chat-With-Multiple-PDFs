@@ -47,6 +47,8 @@ def get_vector_store(text_chunks):
 
 def get_conversational_chain():
     prompt_template = """
+    return a very well formated markdown text with headings, sub headings, points etc.
+
     Answer the quistion as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in the provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
     Context:\n{context}?\n
     Question: \n{question}\n
@@ -85,8 +87,8 @@ def user_input(user_question):
             return_only_outputs=True)
 
         print("response:", response)
-        st.text_area("Answer: ", response["output_text"], int(len(
-            response["output_text"])/2))
+        st.subheader("Answer:", divider=True)
+        st.markdown(response["output_text"])
     except Exception as e:
         st.warning(
             f"Warning: This question may contain explicit or harmful content: \n{e}")
