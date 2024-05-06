@@ -130,5 +130,6 @@ def main():
             "[Connect ⤴](https://www.linkedin.com/in/imdebamritapaul/)")
 
 
+# main function
 if __name__ == "__main__":
     main()
