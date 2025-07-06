@@ -14,8 +14,8 @@ Chat with Multiple PDFs is a Streamlit web application that allows users to ask 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/your-repository.git
-   cd your-repository
+   git clone https://github.com/imdebamrita/Chat-With-Multiple-PDFs.git
+   cd Chat-With-Multiple-PDFs
    ```
 
 2. Install dependencies:
