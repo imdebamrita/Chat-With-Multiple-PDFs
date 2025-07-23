@@ -6,7 +6,7 @@ google-generativeai==0.4.1
 
 langchain==0.1.14
 langchain-core==0.1.42
-langchain-community==0.0.21
+langchain-community==0.0.30
 langchain-google-genai==0.0.11
 
 faiss-cpu==1.7.4
