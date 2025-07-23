@@ -85,7 +85,8 @@ def user_input(user_question):
             return
 
         # Load FAISS index without the allow_dangerous_deserialization parameter
-        new_db = FAISS.load_local("faiss_index", embeddings)
+        new_db = FAISS.load_local(
+            "faiss_index", embeddings, allow_dangerous_deserialization=True)
         docs = new_db.similarity_search(user_question)
 
         chain = get_conversational_chain()
