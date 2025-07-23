@@ -28,6 +28,7 @@ Chat with Multiple PDFs is a Streamlit web application that allows users to ask 
 
    ```env
    GOOGLE_API_KEY=your_google_api_key_here
+   GEMINI_MODEL=gemini_model_name
    ```
 
 4. Run the Streamlit app:
